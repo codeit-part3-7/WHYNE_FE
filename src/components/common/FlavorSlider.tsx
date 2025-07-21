@@ -11,9 +11,10 @@ interface FlavorSliderProps {
   disabled?: boolean;
   labelLeft: string;
   labelRight: string;
-  badgeLabel: string;
+  badgeLabel?: string;
   className?: string;
   ariaLabel?: string;
+  ariaLabelledby?: string;
 }
 
 /**
@@ -33,11 +34,12 @@ export default function FlavorSlider({
   badgeLabel,
   className,
   ariaLabel = "Flavor Slider",
+  ariaLabelledby = "flavor-slider-label",
 }: FlavorSliderProps) {
   return (
     <div className="w-full flex items-center gap-4">
       {badgeLabel && (
-        <Badge variant="taste" className="ml-1">
+        <Badge variant="taste" className="ml-1" id={ariaLabelledby}>
           {badgeLabel}
         </Badge>
       )}
@@ -55,7 +57,7 @@ export default function FlavorSlider({
           disabled={disabled}
           value={[value]}
           onValueChange={(val) => onChange(val[0])}
-          className={cn("flex-1 h-[6px]", className)}
+          className={cn("flex-1 h-2", className)}
         />
 
         {/* 오른쪽 라벨 */}
