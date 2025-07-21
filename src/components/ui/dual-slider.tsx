@@ -1,5 +1,7 @@
 import * as React from "react";
+
 import * as SliderPrimitive from "@radix-ui/react-slider";
+
 import { cn } from "@/lib/utils";
 
 const formatCurrency = (value: number) => `₩ ${value.toLocaleString()}`;
@@ -8,12 +10,12 @@ const thumbClass = cn(
   "relative flex flex-col items-center justify-center",
   "h-5 w-5 rounded-full border border-gray-300 bg-white shadow",
   "transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-  "disabled:pointer-events-none disabled:opacity-50"
+  "disabled:pointer-events-none disabled:opacity-50",
 );
 
 const labelClass = cn(
   "absolute -top-7  min-w-[60px] custom-text-lg-regular text-primary",
-  "text-center whitespace-nowrap"
+  "text-center whitespace-nowrap",
 );
 
 const DualSlider = React.forwardRef<
