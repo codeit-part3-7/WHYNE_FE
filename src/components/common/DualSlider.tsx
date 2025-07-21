@@ -31,7 +31,7 @@ export default function DualSlider({
       disabled={disabled}
       value={value}
       onValueChange={(val) => onChange([val[0], val[1]])}
-      className={cn("w-full h-[6px]", className)}
+      className={cn("w-full h-[48px] pt-[20px]", className)}
     />
   );
 }
