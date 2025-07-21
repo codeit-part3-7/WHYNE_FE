@@ -1,6 +1,6 @@
 import { useState } from "react";
-import FlavorSlider from "@/components/common/FlavorSlider";
-import DualSlider from "@/components/common/DualSlider";
+import FlavorSlider from "@/components/common/slider/FlavorSlider";
+import DualSlider from "@/components/common/slider/DualSlider";
 
 export default function RangeSliderGuidePage() {
   const [price, setPrice] = useState(50);
