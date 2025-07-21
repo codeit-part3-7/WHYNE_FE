@@ -1,5 +1,6 @@
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 interface FlavorSliderProps {
   value: number;
@@ -10,6 +11,7 @@ interface FlavorSliderProps {
   disabled?: boolean;
   labelLeft: string;
   labelRight: string;
+  badgeLabel: string;
   className?: string;
   ariaLabel?: string;
 }
@@ -28,17 +30,22 @@ export default function FlavorSlider({
   disabled = false,
   labelLeft,
   labelRight,
+  badgeLabel,
   className,
   ariaLabel = "Flavor Slider",
 }: FlavorSliderProps) {
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between gap-2">
+    <div className="w-full flex items-center gap-4">
+      {badgeLabel && (
+        <Badge variant="taste" className="ml-1">
+          {badgeLabel}
+        </Badge>
+      )}
+      <div className="flex items-center justify-between gap-2 flex-1">
         {/* 왼쪽 라벨 */}
-        <span className="whitespace-nowrap text-gray-800 custom-text-lg-medium">
+        <span className="whitespace-nowrap text-gray-800 custom-text-md-medium  md:custom-text-lg-medium">
           {labelLeft}
         </span>
-
         {/* 슬라이더 */}
         <Slider
           aria-label={ariaLabel}
@@ -52,7 +59,7 @@ export default function FlavorSlider({
         />
 
         {/* 오른쪽 라벨 */}
-        <span className="whitespace-nowrap text-gray-800 custom-text-lg-medium">
+        <span className="whitespace-nowrap text-gray-800 custom-text-md-medium  md:custom-text-lg-medium">
           {labelRight}
         </span>
       </div>
