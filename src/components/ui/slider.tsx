@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const trackClass = cn(
   "relative h-1.5 w-full grow overflow-hidden",
-  "rounded-full bg-gray-100"
+  "rounded-full bg-gray-100 border border-gray-300 "
 );
 
 const rangeClass = cn("absolute h-full", "bg-transparent");
