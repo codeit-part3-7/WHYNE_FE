@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import Router from 'next/router';
 
+import { getCookie, setCookie } from '@/lib/cookie';
 import { RetryRequestConfig } from '@/types/AuthTypes';
 
 import { updateAccessToken } from './auth';
@@ -21,7 +22,7 @@ apiClient.interceptors.response.use(
   (res) => res.data,
   async (error) => {
     const status = error.response?.status;
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = getCookie({ name: 'refreshToken' });
 
     if (status !== 401 || !refreshToken) return handleCommonError(error);
     try {
@@ -41,7 +42,8 @@ export default apiClient;
 
 // 토큰 추가 메소드
 function addAccessToken(config: InternalAxiosRequestConfig) {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = getCookie({ name: 'accessToken' });
+
   if (accessToken && config.headers) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
@@ -76,7 +78,7 @@ async function handleRequestRefreshToken(
   const data = await updateAccessToken({ refreshToken });
 
   // 갱신받은 access 토큰 저장
-  localStorage.setItem('accessToken', data.accessToken);
+  setCookie({ name: 'accessToken', value: data.accessToken, maxAge: 1800 });
 
   // 새 토큰으로 헤더 수정
   if (originalRequest.headers) {
