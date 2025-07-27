@@ -19,9 +19,9 @@ const useAuthRedirect = () => {
   });
 
   useEffect(() => {
-    // if (userData) {
-    //   router.replace('/');
-    // }
+    if (userData) {
+      router.replace('/');
+    }
   }, [userData, router]);
 
   return { userData, isLoading, hasToken };

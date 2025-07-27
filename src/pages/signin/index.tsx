@@ -2,14 +2,12 @@ import React from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
-import { GetServerSidePropsContext } from 'next';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form';
 import z from 'zod';
 
-import { getUser } from '@/api/user';
 import KakaoIcon from '@/assets/icons/kakao.svg';
 import AuthLayout from '@/components/auth/AuthLayout';
 import AuthLogo from '@/components/auth/AuthLogo';
@@ -18,62 +16,11 @@ import ErrorModal from '@/components/common/Modal/ErrorModal';
 import { Button } from '@/components/ui/button';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 import useErrorModal from '@/hooks/useErrorModal';
-import { getServerCookie, setAuthCookiesWithCallback } from '@/lib/cookie';
+import { setAuthCookiesWithCallback } from '@/lib/cookie';
 import { emailSchema, passwordSchema } from '@/lib/form/schemas';
 import { LoginRequest, LoginResponse } from '@/types/AuthTypes';
 
-import { loginUser, updateAccessToken } from '../../api/auth';
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const cookieHeader = context.req.headers.cookie || '';
-
-  try {
-    const userData = await getUser({ cookieHeader });
-    console.log('유저 데이터:');
-    console.log(userData);
-    return {
-      props: {
-        userData,
-      },
-    };
-  } catch (error) {
-    console.error('에러 발생함:');
-    console.error(error);
-
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      const refreshToken = getServerCookie({ cookieHeader, name: 'refreshToken' });
-      if (status === 401 && refreshToken) {
-        // 401 오류인 경우 + 리프레쉬 토큰 있음 => 액세스 토큰으로 리프레쉬 토큰 요청
-        try {
-          const { accessToken } = await updateAccessToken({ refreshToken });
-          context.res.setHeader('Set-Cookie', [
-            `accessToken=${accessToken}; Path=/; Max-Age=1800; HttpOnly; SameSite=Lax`,
-          ]);
-
-          const updatedCookieHeader = `accessToken=${accessToken}; refreshToken=${refreshToken}`;
-          const userData = await getUser({ cookieHeader: updatedCookieHeader });
-
-          return {
-            props: { userData },
-          };
-        } catch (refreshError) {
-          // 리프레쉬 토큰 갱신 실패 시 쿠키 지움
-          context.res.setHeader('Set-Cookie', [
-            'accessToken=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax',
-            'refreshToken=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax',
-          ]);
-          return {
-            redirect: {
-              destination: '/',
-              permanent: false,
-            },
-          };
-        }
-      }
-    }
-  }
-};
+import { loginUser } from '../../api/auth';
 
 const LoginSchema = z.object({
   email: emailSchema,
