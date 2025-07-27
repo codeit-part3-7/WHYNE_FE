@@ -13,3 +13,10 @@ export interface setCookieCallbackType {
   refreshToken: string;
   callback: () => void;
 }
+
+export interface ServerCookieParams {
+  cookieHeader: string | undefined;
+  name: string;
+}
+
+export type ServerCookieReturn = string | undefined;
