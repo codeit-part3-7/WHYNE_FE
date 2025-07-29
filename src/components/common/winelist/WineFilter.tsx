@@ -1,5 +1,3 @@
-// import { useState } from 'react';
-
 import SearchButton from '@/assets/icons/SearchButton.svg';
 import WineTypeFilter from '@/components/common/Filter/WineTypeFilter';
 import Input from '@/components/common/Input';
@@ -10,11 +8,10 @@ export default function WineFilter() {
   // const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (
-    <div className='w-full'>
+    <div className='w-full max-w-[1140px] mx-auto'>
       {/* PC: 필터 + 검색창 + 등록 버튼 */}
       <div className='hidden xl:flex  max-w-[1140px] mx-auto mt-[30px] gap-[24px]'>
         <div className='flex-shrink-0 w-[260px] h-auto flex flex-col gap-[50px] ml-[-28px]'>
-          {/* gap-[30px] 적용을 위해 flex container로 묶음 */}
           <div className='pt-[70px] '>
             <WineTypeFilter className='h-[450px]' />
           </div>
@@ -28,7 +25,7 @@ export default function WineFilter() {
           </Button>
         </div>
 
-        <div className='flex-1 flex flex-col items-end gap-[24px] text-gray-500 [&_label]:top-[10px] md:[&_label]:top-[14px] xl:[&_label]:top-[14px]'>
+        <div className='flex-1 flex flex-col items-end gap-[18px] text-gray-500 [&_label]:top-[10px] md:[&_label]:top-[14px] xl:[&_label]:top-[14px]'>
           <Input
             id='wine-search'
             type='text'
@@ -47,7 +44,7 @@ export default function WineFilter() {
       </div>
 
       {/* Tablet: 필터 버튼 + 검색창 + 등록 버튼 */}
-      <div className='hidden md:flex xl:hidden flex-row items-center px-[20px] mt-[24px]'>
+      <div className='hidden md:flex xl:hidden flex-row items-center px-[20px] mt-[24px] md:mt-[50px] md:mb-[80px]'>
         <Button
           // onClick={() => setIsFilterOpen(true)}
           variant='white'
@@ -94,7 +91,7 @@ export default function WineFilter() {
           />
         </div>
 
-        <div className='w-fit'>
+        <div className='w-fit mt-[15px] mb-[20px]'>
           <Button
             // onClick={() => setIsFilterOpen(true)}
             variant='white'
