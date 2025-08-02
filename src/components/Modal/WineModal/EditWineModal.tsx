@@ -185,7 +185,7 @@ const EditWineModal = ({ wine, showEditModal, setShowEditModal }: EditWineModalP
     watchedPrice &&
     watchedOrigin?.trim() &&
     watchedType?.trim() &&
-    watchedImage?.length > 0;
+    (watchedImage?.length > 0 || previewImage);
 
   const renderButton = (
     <Button
