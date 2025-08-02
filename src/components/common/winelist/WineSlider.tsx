@@ -1,5 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { getWineInfoForClient } from '@/api/getWineInfo';
 import {
   Carousel,
   CarouselContent,
@@ -13,13 +16,29 @@ import { RecommendedWineResponse } from '@/types/wineListType';
 import WineCard from './WineCard';
 
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM;
-const RECOMMENDED_WINES_LIMIT = 4;
+const RECOMMENDED_WINES_LIMIT = 30;
 
 export default function WineSlider() {
   const { data, isLoading, isError } = useQuery<RecommendedWineResponse>({
     queryKey: ['recommendedWines'],
     queryFn: () => getRecommendedWines({ teamId: TEAM_ID!, limit: RECOMMENDED_WINES_LIMIT }),
   });
+
+  const queryClient = useQueryClient();
+
+  const prefetchWineInfo = async (wineid: number) => {
+    await queryClient.prefetchQuery({
+      queryKey: ['wineDetail', wineid],
+      queryFn: () => getWineInfoForClient(wineid),
+      staleTime: 1000 * 60 * 5,
+    });
+  };
+
+  useEffect(() => {
+    data?.forEach((wine) => {
+      prefetchWineInfo(wine.id);
+    });
+  }, [data]);
 
   return (
     <div className='mx-auto px-[16px] md:px-[20px] xl:px-0 max-w-[1140px] min-w-[365px] mt-[20px] mb-[24px]'>
@@ -41,7 +60,12 @@ export default function WineSlider() {
               }
 
               return (
-                <Carousel className='w-full'>
+                <Carousel
+                  opts={{
+                    align: 'start',
+                    slidesToScroll: 2,
+                  }}
+                >
                   <CarouselContent>
                     {filteredWines.map((wine) => (
                       <CarouselItem key={wine.id} className='basis-auto flex items-start '>

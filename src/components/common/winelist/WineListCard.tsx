@@ -1,7 +1,9 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 
+import { getWineInfoForClient } from '@/api/getWineInfo';
 import NextIcon from '@/assets/icons/Next.svg';
 import StarIcon from '@/assets/icons/star.svg';
 import { ImageCard } from '@/components/common/card/ImageCard';
@@ -25,17 +27,38 @@ export default function WineListCard() {
     threshold: 0.3,
   });
 
-  if (isLoading) return <p>불러오는 중...</p>;
-  if (isError || !data) return <p>와인 데이터를 불러올 수 없습니다.</p>;
-
-  const wineList = data.pages.flatMap(
+  const wineList = data?.pages.flatMap(
     (page) =>
       (page as GetWinesResponse)?.list?.filter((wine) => !wine.image.includes('example.com')) ?? [],
   );
 
+  const queryClient = useQueryClient();
+
+  const prefetchWineInfo = async (wineid: number) => {
+    await queryClient.prefetchQuery({
+      queryKey: ['wineDetail', wineid],
+      queryFn: () => getWineInfoForClient(wineid),
+      staleTime: 1000 * 60 * 5,
+    });
+  };
+
+  // // 데이터 프리패칭용
+  useEffect(() => {
+    wineList?.forEach((wine) => {
+      prefetchWineInfo(wine.id);
+    });
+  }, [wineList]);
+
+  if (isLoading) return <p>불러오는 중...</p>;
+  if (isError || !data) return <p>와인 데이터를 불러올 수 없습니다.</p>;
+
   return (
-    <div className='flex flex-col gap-[24px] px-[16px] mt-[12px] min-w-[370px] md:px-[20px] md:mt-[24px] xl:px-0 max-w-[1140px] mx-auto xl:max-w-[800px]'>
-      {wineList.map((wine) => (
+    <div
+      className='flex flex-col gap-[24px] px-[16px] mt-[12px] min-w-[370px] h-[390px]
+    md:px-[20px] md:mt-[24px] 
+    xl:px-0 max-w-[1140px] mx-auto xl:max-w-[800px] xl:800px'
+    >
+      {wineList?.map((wine) => (
         <Link href={`/wines/${wine.id}`} key={wine.id} className='no-underline'>
           <div className='w-full bg-white border border-gray-300 rounded-xl flex flex-col relative min-w-[320px]'>
             <ImageCard
@@ -51,11 +74,11 @@ export default function WineListCard() {
               rightSlot={null}
             >
               <div className='flex flex-col w-full px-[16px] md:px-0'>
-                <div className='flex flex-col w-full ml-0 mt-[20px] gap-[8px] md:w-[300px] md:ml-[36px] md:gap-[10px]'>
-                  <div className='custom-text-xl-semibold text-gray-800 leading-[32px] h-auto break-words max-w-[220px] mt-[5px] md:custom-text-3xl-semibold md:max-w-none'>
+                <div className='flex flex-col w-full ml-0 mt-[20px] gap-[8px] md:w-[360px] md:ml-[36px] md:gap-[10px]'>
+                  <div className='custom-text-xl-semibold text-gray-800 leading-[32px] h-auto max-w-[220px] mt-[5px] md:text-[30px] md:max-w-[400px] md:min-h-[10px]'>
                     {wine.name}
                   </div>
-                  <div className='custom-text-md-regular text-gray-500 leading-[24px] h-[24px] md:text-[16px] md:leading-[26px] md:h-[26px] break-words'>
+                  <div className='[custom-text-md-regular] text-gray-500 leading-[24px] h-[24px] md:text-[16px] md:leading-[26px] md:h-[26px] break-words'>
                     {wine.region}
                   </div>
                   <Button
@@ -68,38 +91,35 @@ export default function WineListCard() {
                     ₩ {wine.price.toLocaleString()}
                   </Button>
                 </div>
-
-                <div className='flex flex-row items-start mt-[23px] w-full ml-0 gap-[6px] md:hidden'>
-                  <div className='text-[28px] font-extrabold text-gray-800 w-auto h-auto'>
-                    {wine.avgRating?.toFixed(1)}
-                  </div>
-                  <div className='flex flex-col gap-[5px] ml-[15px] w-[100px] h-auto mt-[-6px]'>
-                    <div className='flex gap-[4px] flex-nowrap'>
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <StarIcon
-                          key={i}
-                          className={cn(
-                            wine.avgRating >= i + 1 ? 'fill-purpleDark' : 'fill-gray-300',
-                            'w-3 h-3',
-                          )}
-                        />
-                      ))}
+                <div className='flex flex-row items-start justify-between mt-[23px] w-full ml-0 gap-[6px] md:hidden'>
+                  <div className='flex items-start gap-[6px]'>
+                    <div className='text-[28px] font-extrabold text-gray-800 w-auto h-auto'>
+                      {wine.avgRating?.toFixed(1)}
                     </div>
-                    <div className='custom-text-xs-regular text-gray-500 break-words'>
-                      {wine.reviewCount}개의 후기
+                    <div className='flex flex-col gap-[5px] ml-[15px] w-[100px] h-auto mt-[-6px]'>
+                      <div className='flex gap-[4px] flex-nowrap'>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <StarIcon
+                            key={i}
+                            className={cn(
+                              wine.avgRating >= i + 1 ? 'fill-purpleDark' : 'fill-gray-300',
+                              'w-3 h-3',
+                            )}
+                          />
+                        ))}
+                      </div>
+                      <div className='custom-text-xs-regular text-gray-500 break-words'>
+                        {wine.reviewCount}개의 후기
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className='flex-grow md:hidden flex justify-end items-center px-[16px] pr-[10px] mt-[-35px]'>
                   <button type='button' className='w-[36px] h-[36px] p-[4px] rounded'>
                     <NextIcon className='w-full h-full text-gray-300 hover:text-gray-500' />
                   </button>
                 </div>
               </div>
             </ImageCard>
-
-            <div className='hidden md:flex flex-col items-start absolute top-[40px] right-[-10px] z-10'>
+            <div className='hidden md:flex flex-col items-start absolute top-[35px] right-[-20px]'>
               <div className='text-[48px] font-extrabold text-gray-800 leading-[48px] md:mt-[9px]'>
                 {wine.avgRating?.toFixed(1)}
               </div>
@@ -120,17 +140,14 @@ export default function WineListCard() {
                 </div>
               </div>
             </div>
-
             <button
               type='button'
-              className='w-[40px] h-[40px] p-[4px] rounded flex-shrink-0 ml-0 hidden md:block absolute top-[185px] right-[50px] z-20'
+              className='w-[40px] h-[40px] p-[4px] rounded flex-shrink-0 ml-10 hidden md:block absolute top-[185px] right-[20px]'
             >
               <NextIcon className='w-full h-full text-gray-300 hover:text-gray-500' />
             </button>
-
             <div className='w-full h-px bg-gray-300 mt-[-1px]' />
-
-            <div className='px-[25px] py-[20px]'>
+            <div className='px-[25px] py-[20px] xl:w-[800px] xl:h-[110px]'>
               <div className='text-[14px] font-semibold text-gray-800 mb-[4px] break-words'>
                 최신 후기
               </div>

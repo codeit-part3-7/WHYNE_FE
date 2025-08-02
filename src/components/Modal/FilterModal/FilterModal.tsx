@@ -49,7 +49,7 @@ const FilterModal = ({
   const renderForm = (
     <form onSubmit={handleApplyFilter}>
       <WineTypeFilter
-        className='mt-[20px] mb-[25px] mx-5 md:mx-0 '
+        className='mt-[20px] mb-[25px] mx-5 md:mx-0'
         showBorder={true}
         hasMargin={false}
       />
