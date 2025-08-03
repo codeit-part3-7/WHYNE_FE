@@ -203,21 +203,22 @@ const EditWineModal = ({ wine, showEditModal, setShowEditModal }: EditWineModalP
   );
 
   const renderForm = () => (
-    <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+    <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' className='mx-2'>
       {/* 와인 이름 */}
       <p className='custom-text-md-medium md:custom-text-lg-medium mb-[10px] md:mb-[12px] mt-[22px] md:mt-[24px]'>
         와인 이름
       </p>
       <Input
-        className='custom-text-md-regular md:custom-text-lg-regular w-full'
         id='wineName'
         type='text'
+        variant='name'
         placeholder='와인 이름 입력'
         {...register('wineName', {
           required: '와인 이름을 입력해주세요.',
           ...getTrimmedHandlers<WineForm>('wineName', setValue, clearErrors), //정규식 검사 함수
         })}
         errorMessage={errors.wineName?.message}
+        className='custom-text-md-regular md:custom-text-lg-regular'
       />
 
       {/* 가격 */}
@@ -225,9 +226,10 @@ const EditWineModal = ({ wine, showEditModal, setShowEditModal }: EditWineModalP
         가격
       </p>
       <Input
-        className='w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none custom-text-md-regular md:custom-text-lg-regular'
+        className='[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none custom-text-md-regular md:custom-text-lg-regular'
         id='winePrice'
         type='text'
+        variant='name'
         placeholder='가격 입력'
         {...register('winePrice', {
           required: '가격을 입력해 주세요.',
@@ -246,9 +248,10 @@ const EditWineModal = ({ wine, showEditModal, setShowEditModal }: EditWineModalP
         원산지
       </p>
       <Input
-        className='w-full custom-text-md-regular md:custom-text-lg-regular'
+        className='custom-text-md-regular md:custom-text-lg-regular'
         id='wineOrigin'
         type='text'
+        variant='name'
         placeholder='원산지 입력'
         {...register('wineOrigin', {
           required: '원산지를 입력해주세요.',
