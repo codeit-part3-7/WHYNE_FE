@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { motion } from 'framer-motion';
-
 import { Progress } from '@/components/ui/progress';
 import useWineStore from '@/stores/wineStore';
 
@@ -25,11 +23,7 @@ function WineRating({ rating, reviewCount, ratings }: Props) {
   });
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 0 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0 }}
-      transition={{ duration: 1.6, ease: 'easeOut' }}
+    <div
       className='mb-10 md:mb-[60px] md:px-[63px] xl:px-0 w-full xl:max-w-[280px] mx-auto xl:mx-0 order-1 xl:order-2  
       flex flex-col md:flex-row md:gap-20 xl:gap-0 xl:flex-col xl:relative'
     >
@@ -59,7 +53,7 @@ function WineRating({ rating, reviewCount, ratings }: Props) {
           </div>
         </>
       )}
-    </motion.div>
+    </div>
   );
 }
 
