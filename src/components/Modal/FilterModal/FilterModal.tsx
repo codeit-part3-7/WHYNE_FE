@@ -66,7 +66,7 @@ const FilterModal = ({
           onOpenChange={onOpenChange}
           buttons={renderButton}
         >
-          {renderForm}
+          <div className='w-full'>{renderForm}</div>
         </BasicModal>
       ) : (
         <div>

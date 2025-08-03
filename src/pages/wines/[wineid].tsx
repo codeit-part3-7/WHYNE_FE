@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -65,12 +64,7 @@ export default function WineInfoById(props: WinePageProps) {
       </Head>
 
       <main className='mx-auto px-4 md:px-5 xl:px-0 max-w-[1140px]  min-w-[343px]'>
-        <motion.div
-          initial={{ opacity: 0.3, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
+        <div>
           <ImageCard
             imageSrc={data.image}
             imageClassName={IMAGE_CLASS_NAME}
@@ -82,21 +76,16 @@ export default function WineInfoById(props: WinePageProps) {
           >
             <WineContent name={data.name} region={data.region} price={data.price} />
           </ImageCard>
-        </motion.div>
+        </div>
 
         <div className='flex flex-col xl:flex-row max-w-[1140px] w-full mx-auto justify-between '>
           <div className='flex-col  order-2 xl:order-1 xl:max-w-[1140px] '>
-            <motion.div
-              initial={{ opacity: 0.3, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            >
+            <div>
               <h2 className='sr-only xl:not-sr-only !mb-[22px] xl:custom-text-xl-bold'>
                 리뷰 목록
               </h2>
               <Reviews wine={data} reviews={data.reviews} reviewCount={data.reviewCount} />
-            </motion.div>
+            </div>
           </div>
 
           <WineRating
