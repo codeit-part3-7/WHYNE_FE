@@ -81,7 +81,14 @@ export function WineList({ setTotalCount }: WineListProps) {
   const wines: MyWine[] =
     data?.pages?.flatMap((page) => page?.list ?? [])?.sort((a, b) => b.id - a.id) ?? [];
 
-  if (!data || data.pages[0].list.length === 0) {
+  //  빈 목록 처리
+  if (!data || !data.pages) {
+    return null; // 아직 로딩 중이면 아무것도 안 보여줌
+  }
+
+  const isEmpty = data.pages[0].list.length === 0;
+
+  if (!isFetchingNextPage && isEmpty) {
     return <MyPageEmpty type='wines' />;
   }
 

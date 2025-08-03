@@ -85,7 +85,13 @@ export function ReviewList({ setTotalCount }: ReviewListProps) {
       ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) ?? [];
 
   //  빈 목록 처리
-  if (!data || data.pages[0].list.length === 0) {
+  if (!data || !data.pages) {
+    return null; // 아직 로딩 중이면 아무것도 안 보여줌
+  }
+
+  const isEmpty = data.pages[0].list.length === 0;
+
+  if (!isFetchingNextPage && isEmpty) {
     return <MyPageEmpty type='reviews' />;
   }
 
