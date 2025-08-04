@@ -33,7 +33,6 @@ export function ReviewList({ setTotalCount }: ReviewListProps) {
   const [deleteReviewId, setDeleteReviewId] = useState<number | null>(null);
 
   const observerRef = useRef<HTMLDivElement | null>(null); // 옵저버 대상 요소
-  const prevScrollY = useRef<number>(0); // 추가됨: fetch 이전 스크롤 위치 기억용
 
   // 무한 스크롤 쿼리 세팅
   const { data, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery(
@@ -52,7 +51,7 @@ export function ReviewList({ setTotalCount }: ReviewListProps) {
     }
   }, [data, setTotalCount]);
 
-  // 👀 IntersectionObserver 감지 로직 연결
+  // IntersectionObserver 감지 로직 연결
   useInfiniteScroll({
     targetRef: observerRef,
     hasNextPage,
@@ -60,29 +59,10 @@ export function ReviewList({ setTotalCount }: ReviewListProps) {
     isFetching: isFetchingNextPage,
   });
 
-  //  fetch 시작 전 현재 스크롤 위치 기억 (스크롤 튐 방지 목적)
-  useEffect(() => {
-    if (isFetchingNextPage) {
-      prevScrollY.current = window.scrollY;
-    }
-  }, [isFetchingNextPage]);
-
-  // fetch 완료 후 이전 스크롤 위치로 복원
-  useEffect(() => {
-    if (!isFetchingNextPage) {
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: prevScrollY.current, behavior: 'instant' });
-      });
-    }
-  }, [data?.pages.length]);
-
   if (isError) throw error;
 
   //  정렬: 최신순 (createdAt 기준 내림차순)
-  const reviews: MyReview[] =
-    data?.pages
-      ?.flatMap((page) => page.list ?? [])
-      ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) ?? [];
+  const reviews: MyReview[] = data?.pages?.flatMap((page) => page?.list ?? []) ?? [];
 
   //  빈 목록 처리
   if (!data || !data.pages) {

@@ -29,7 +29,6 @@ interface WineListProps {
  */
 export function WineList({ setTotalCount }: WineListProps) {
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const prevScrollY = useRef<number>(0); // 스크롤 위치 저장용 ref
 
   const [editWine, setEditWine] = useState<MyWine | null>(null);
   const [deleteWineId, setDeleteWineId] = useState<number | null>(null);
@@ -59,27 +58,10 @@ export function WineList({ setTotalCount }: WineListProps) {
     isFetching: isFetchingNextPage,
   });
 
-  // fetch 시작 전에 현재 스크롤 위치 저장
-  useEffect(() => {
-    if (isFetchingNextPage) {
-      prevScrollY.current = window.scrollY;
-    }
-  }, [isFetchingNextPage]);
-
-  // fetch 완료 후 이전 스크롤 위치로 복원
-  useEffect(() => {
-    if (!isFetchingNextPage) {
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: prevScrollY.current, behavior: 'instant' });
-      });
-    }
-  }, [data?.pages.length]);
-
   if (isError) throw error;
 
   // 최신순 (ID 기준 내림차순)
-  const wines: MyWine[] =
-    data?.pages?.flatMap((page) => page?.list ?? [])?.sort((a, b) => b.id - a.id) ?? [];
+  const wines: MyWine[] = data?.pages?.flatMap((page) => page?.list ?? []) ?? [];
 
   //  빈 목록 처리
   if (!data || !data.pages) {
