@@ -148,7 +148,7 @@
 - 초기 진입 시 스플래쉬 이미지를 넣어 gnb가 업데이트 되는 모습을 가렸습니다.
 - framer motion을 통해 애니메이션을 적용해 사용자에게 부드러운 첫 인상을 제공했습니다.
 
-gif추가
+![KakaoTalk_Recording_20250805_143950-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/9544927c-5db3-4e22-bc1f-529955d9f623)
 
 
 ## [로그인/회원가입]
@@ -158,7 +158,8 @@ gif추가
 - 로그인 성공 시 setCookie헤더가 달린 응답을 받아 유저의 엑세스토큰과 리프레쉬 토큰을 쿠키에 저장합니다.
 - 카카오 소셜로그인을 지원합니다.
 
-gif 추가
+![ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/3b0bfe08-8c03-4669-b68c-55cc237a1573)
+
 
 ## [마이 프로필 페이지]
 
@@ -166,7 +167,8 @@ gif 추가
 - 본인이 작성한 리뷰와 와인을 확인할 수 있습니다.
 - 해당 페이지에서 본인이 작성한 리뷰와 와인들을 수정, 삭제할 수 있습니다.
 
-gif추가
+![KakaoTalk_Recording_20250805_144908-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/b88670aa-d146-481f-a51f-24dc71b1e489)
+
 
 ## [와인 목록 페이지]
 
@@ -176,7 +178,8 @@ gif추가
 - 와인 등록하기 버튼을 통해 새로운 와인을 등록할 수 있습니다.
 - 와인 카드를 클릭해 와인 상세페이지로 이동할 수 있습니다.
 
-gif추가
+![KakaoTalk_Recording_20250805_145151-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/f49e603b-9340-48e0-8b4d-df1fc498c0ec)
+
 
 ## [와인 상세 페이지]
 
@@ -185,4 +188,5 @@ gif추가
 - 관심있는 리뷰는 열어서 상세하게 볼 수 있고, 좋아요를 할 수 있습니다.
 - 본인이 작성한 리뷰는 수정 및 삭제가 가능합니다.
 
-git추가
+![KakaoTalk_Recording_20250805_135143-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/d500357b-9893-4e46-b47b-45914dc5468d)
+
